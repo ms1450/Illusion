@@ -1,6 +1,7 @@
 package Server;
 
 import Common.IllProtocol;
+import Common.IllusionEncryptor;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -107,12 +108,14 @@ public class IllServer implements IllProtocol {
                 print(printWriter1,IllProtocol.UR_TURN);
                 String[] user1said = getText(in1);
                 System.out.println(" User #1: "+printText((user1said)));
+                System.err.println("Decoder : "+IllusionEncryptor.decoder(printText(user1said).trim()));
                 if(user1said[0].equals(IllProtocol.TERMINATE))running=false;
                 print(printWriter2,IllProtocol.SPEECH +" " +printText(user1said));
 
                 print(printWriter2,IllProtocol.UR_TURN);
                 String[] user2said = getText(in2);
                 System.out.println(" User #2: "+printText((user2said)));
+                System.err.println("Decoder : "+IllusionEncryptor.decoder(printText(user2said).trim()));
                 if(user2said[0].equals(IllProtocol.TERMINATE))running=false;
                 print(printWriter1,IllProtocol.SPEECH +" " +printText(user2said));
             }
