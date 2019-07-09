@@ -1,15 +1,25 @@
 package Common;
 
+/**
+ * A List of the Protocol Commands that will be Used in this Encryption
+ * @author Mehul Sen
+ */
 public interface IllProtocol {
-    //Start Up
+    //Initialize Command Sent By the Server
     public static final String INIT = "ILLUSION_INIT";
-    //Sent from Server to Client Asking it for Text
+
+    //Server Requesting the Client for Text
     public static final String UR_TURN = "REQ_TEXT";
-    //Sent from Client to server along with the text
+
+    //Client Providing the Server with Text
     public static final String SPEECH = "SAID";
+
+    //Future Applications of Server replying to the Clients on its own
     public static final String SERVER_SPEECH = "SERVER_SAID";
-    //Sent when ending a chat
+
+    //Sent when ending a client ends a conversation
     public static final String TERMINATE = "EXIT";
+
     //Sent if an error occurs
     public static final String ERROR = "OHNO";
 }

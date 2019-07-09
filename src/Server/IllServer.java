@@ -2,38 +2,50 @@ package Server;
 
 import Common.IllException;
 import Common.IllProtocol;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-
+/**
+ * The Server Side Application for Illusion
+ * @author Mehul Sen
+ */
 public class IllServer implements IllProtocol {
+
     /* Server Socket Created */
     private ServerSocket serverSocket;
 
-    /* Client 1 Connection Created */
+    /* Client 1 Connections */
     private Socket client1;
     private PrintWriter printWriter1;
     private Scanner in1;
 
-    /* Client 2 Connection Created */
+    /* Client 2 Connections */
     private Socket client2;
     private PrintWriter printWriter2;
     private Scanner in2;
 
+    /* State of the Application*/
     private boolean running = true;
 
+    /**
+     * Constructor for the Server Creation
+     * @param port Port Number for Illusion
+     * @throws IOException Exception Handling for inp==ut and output
+     */
     private IllServer(int port) throws IOException {
         serverSocket = new ServerSocket(port);
     }
 
+    /**
+     * Connects to both the Clients and starts the exchange
+     * @throws IOException Exception handling for input and output
+     */
     private void connectToClients()throws IOException{
         System.err.println("\t Connecting to User #1 : ");
         client1 = serverSocket.accept();
@@ -52,6 +64,11 @@ public class IllServer implements IllProtocol {
         System.err.println("\t Initiating Conversation ...");
     }
 
+    /**
+     * Converts any array into a Continous string
+     * @param array Array to be converted
+     * @return Continuous string
+     */
     private String printText(String[] array){
         String temp = "";
         for(int i = 1;i< array.length; i++){
@@ -62,7 +79,6 @@ public class IllServer implements IllProtocol {
 
     /**
      * Sends a String to a Client
-     *
      * @param printer PrintWriter of a Client
      * @param text    Text to be Sent
      */
@@ -73,29 +89,32 @@ public class IllServer implements IllProtocol {
 
     /**
      * Sends text to both the Clients
-     *
+     * (Might Be Used in Later Versions of the Application)
      * @param printWriter1 PrintWriter of Client 1
      * @param printWriter2 PrintWriter of Client 2
-     * @param text1        Text to be Sent to Client 1
-     * @param text2        Text to be Sent to Client 2
+     * @param text        Text to be Sent
      */
-    private void announce(PrintWriter printWriter1, PrintWriter printWriter2, String text1, String text2) {
-        print(printWriter1, text1);
-        print(printWriter2, text2);
+    private void announce(PrintWriter printWriter1, PrintWriter printWriter2, String text) {
+        print(printWriter1, text);
+        print(printWriter2, text);
     }
 
+    /**
+     * Conducts the exchange of words between the Clients
+     * @throws IllException Exception handling for protocol
+     */
     private void talk()throws IllException{
         try {
             while (running){
                 print(printWriter1,IllProtocol.UR_TURN);
                 String[] user1said = getText(in1);
-                System.out.println("\t User #1: "+printText((user1said)));
+                System.out.println(" User #1: "+printText((user1said)));
                 if(user1said[0] == IllProtocol.TERMINATE)running=false;
                 print(printWriter2,IllProtocol.SPEECH +" " +printText(user1said));
 
                 print(printWriter2,IllProtocol.UR_TURN);
                 String[] user2said = getText(in2);
-                System.out.println("\t User #2: "+printText((user2said)));
+                System.out.println(" User #2: "+printText((user2said)));
                 if(user2said[0] == IllProtocol.TERMINATE)running=false;
                 print(printWriter1,IllProtocol.SPEECH +" " +printText(user2said));
             }
@@ -109,6 +128,11 @@ public class IllServer implements IllProtocol {
         }
     }
 
+    /**
+     * Gets the Text from a client.
+     * @param in Scanner for a Client
+     * @return Array including the Text
+     */
     private String[] getText(Scanner in) {
         String[] token = in.nextLine().split(" ");
         return token;
@@ -116,7 +140,6 @@ public class IllServer implements IllProtocol {
 
     /**
      * Closes every Connection.
-     *
      * @throws IOException Input Output Exception
      */
     private void closeGame() throws IOException {
@@ -135,7 +158,6 @@ public class IllServer implements IllProtocol {
 
     /**
      * Starts a new sever.
-     *
      * @param args Used to specify the port on which the server should listen
      *             for incoming client connections.
      * @throws IllException If there is an error starting the server.

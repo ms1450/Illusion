@@ -2,24 +2,28 @@ package Client;
 
 import Common.IllException;
 import Common.IllProtocol;
-
 import java.io.*;
 import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-
+/**
+ * Client side application for Illusion
+ * @author Mehul Sen
+ */
 public class IllClient {
 
     /* Socket Connection to Server */
     private Socket socket;
+
+    /* Other User's Number */
     private int otherNo;
 
-    /* Connection to the Server */
+    /* Connection to the Server for Input and Output */
     private PrintWriter printWriter;
     private Scanner in;
 
-    /* Input from User */
+    /* Input from User Console */
     private Scanner user;
 
     /**
@@ -35,6 +39,11 @@ public class IllClient {
         user = new Scanner(System.in);
     }
 
+    /**
+     * Concatenates the String Array into one Long String
+     * @param array Array to be concatenated
+     * @return One Long String
+     */
     private String concatenateArray(String[] array){
         String temp = "";
         for(int i = 1;i< array.length; i++){
@@ -44,7 +53,7 @@ public class IllClient {
     }
 
     /**
-     * Print to the Server
+     * Prints to the Server
      * @param text Text to be Printed
      */
     private void print(String text){
@@ -60,7 +69,11 @@ public class IllClient {
         return in.nextLine().split(" ");
     }
 
-    public void initiate() throws IllException{
+    /**
+     * Conducts the communication between the server and the client.
+     * @throws IllException Occurs in case of an Error
+     */
+    private void initiate() throws IllException{
         int usrNo = Integer.parseInt(read()[1]);
         if(usrNo == 1)otherNo = 2;
         else otherNo = 1;
@@ -84,7 +97,7 @@ public class IllClient {
                         System.err.println("\t #"+ otherNo+ " : "+concatenateArray(input));
                         break;
                     case IllProtocol.UR_TURN:
-                        System.out.println("\t >");
+                        System.out.print(">");
                         String text = user.nextLine();
                         if(text.equals("TERMINATE")){
                             run = false;
@@ -104,6 +117,12 @@ public class IllClient {
         System.err.println("\t Connection Closed");
     }
 
+    /**
+     * Main Function from the Client Side
+     * @param args Arguments that might be passed
+     * @throws IllException Exception Handling for Illusion
+     * @throws IOException Exception Handling for Input and Output
+     */
     public static void main(String[]args) throws IllException, IOException {
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(isr);
