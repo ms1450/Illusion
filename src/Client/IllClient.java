@@ -1,5 +1,6 @@
 package Client;
 
+import Common.IllusionEncryptor;
 import Common.IllProtocol;
 import java.io.*;
 import java.net.Socket;
@@ -91,7 +92,8 @@ public class IllClient {
                         run = false;
                         break;
                     case IllProtocol.SPEECH:
-                        System.err.println("\t #"+ otherNo + " : "+concatenateArray(input));
+                        //System.err.println("\t #"+ otherNo + " : "+concatenateArray(input));
+                        System.err.println("\t #"+ otherNo + " : " + IllusionEncryptor.decoder(concatenateArray(input).trim()));
                         break;
                     case IllProtocol.UR_TURN:
                         System.out.print(">");
@@ -101,8 +103,8 @@ public class IllClient {
                             System.err.println("\t Closing Connection To Server");
                             print(IllProtocol.TERMINATE);
                         }
-                        //TODO Add Encryption To text
-                        print(IllProtocol.SPEECH + " " + text);
+                        //print(IllProtocol.SPEECH + " " + text);
+                        print(IllProtocol.SPEECH + " " + IllusionEncryptor.encoder(text));
                         break;
                 }
             }
