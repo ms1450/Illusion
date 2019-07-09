@@ -5,11 +5,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Text to ROT  then to BIN then to REV BIN
+ * The first Encryptor that ive created, im not sure if im supposed to label it or not because its an encryption
+ * technique but ah well screw it, im going to
+ * Its a simple encryption
+ * @author Mehul Sen
  */
 public class IllusionEncryptor {
 
-
+    /**
+     * This method uses rot 13 if the character is a letter and rot 5 if it is a number
+     * @param input string before rotting
+     * @return rotted string
+     */
     private String rotIt(String input){
         StringBuilder output = new StringBuilder();
         for(int i = 0; i < input.length(); i++){
@@ -23,6 +30,11 @@ public class IllusionEncryptor {
         return String.valueOf(output);
     }
 
+    /**
+     * Helper method to rot the character if the character is a letter.
+     * @param input The char input provided
+     * @return rotted character
+     */
     private char charROT(char input){
         char[] alphabets = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
                 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
@@ -40,6 +52,11 @@ public class IllusionEncryptor {
         return converted;
     }
 
+    /**
+     * Helper method to rot if the character is a number
+     * @param input the char input provided
+     * @return rotted character
+     */
     private char numROT(char input){
         char[] numbers = {'1','2','3','4','5','6','7','8','9','0'};
         char converted = 0;
@@ -53,6 +70,11 @@ public class IllusionEncryptor {
         return converted;
     }
 
+    /**
+     * Converts a String to its binary counterpart
+     * @param rot String
+     * @return String but only consisting of ones and zeroes
+     */
     private String ROTtoBIN(String rot){
         byte[] bytes = rot.getBytes();
         StringBuilder binary = new StringBuilder();
@@ -69,6 +91,11 @@ public class IllusionEncryptor {
         return String.valueOf(binary);
     }
 
+    /**
+     * Reverses the binary state, if it is one, then it will have zero, if it is a zero then it will have a one.
+     * @param bin Binary String
+     * @return reversed binary string
+     */
     private String BINtoBINREV(String bin){
         StringBuilder newBin = new StringBuilder();
         for(int i = 0; i < bin.length(); i++){
@@ -79,6 +106,11 @@ public class IllusionEncryptor {
         return newBin.toString();
     }
 
+    /**
+     * Converts a binary string back to a normal string
+     * @param bin binary string
+     * @return normal string
+     */
     private String BINtoSTR(String bin){
                 StringBuilder s = new StringBuilder(" ");
         for(int index = 0; index < bin.length(); index+=9) {
@@ -90,16 +122,31 @@ public class IllusionEncryptor {
         return s.toString().trim();
     }
 
+    /**
+     * The entire encoding method neatly tied with a bow, Kept it for any changes i might make in further developments
+     * @param text Text to be encoded
+     * @return String with the encoded data
+     */
     public static String encoder(String text){
         IllusionEncryptor ie = new IllusionEncryptor();
         return ie.BINtoBINREV(ie.ROTtoBIN(ie.rotIt(text)));
     }
 
+    /**
+     * The entire decoding method neatly tied with a bow
+     * @param text text to be decoded
+     * @return original text
+     */
     public static String decoder(String text){
         IllusionEncryptor ie = new IllusionEncryptor();
         return ie.rotIt(ie.BINtoSTR(ie.BINtoBINREV(text)));
     }
 
+    /**
+     * The main program to check if this encoded decoder is working or not.
+     * @param args Arguments
+     * @throws IOException Exception handling for input output.
+     */
     public static void main(String[]args)throws IOException{
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(isr);

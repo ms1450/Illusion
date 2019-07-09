@@ -108,7 +108,7 @@ public class IllClient {
                         break;
                 }
             }
-        }catch (NoSuchElementException ne){System.err.println("\t Connection Lost!");}
+        }catch (NoSuchElementException ne){System.err.println("User #"+otherNo+ " terminated the connection.");}
         in.close();
         printWriter.close();
         user.close();

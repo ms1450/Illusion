@@ -124,7 +124,9 @@ public class IllServer implements IllProtocol {
             print(printWriter2, IllProtocol.ERROR);
             System.err.println("\t Connection Lost");
         }
-        try {closeGame();
+        try {
+            closeGame();
+            System.err.println("Closed the Connection.");
         }catch (IOException ie){ie.printStackTrace();
         }
     }
