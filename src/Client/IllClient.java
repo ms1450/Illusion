@@ -1,6 +1,5 @@
 package Client;
 
-import Common.IllException;
 import Common.IllProtocol;
 import java.io.*;
 import java.net.Socket;
@@ -15,9 +14,6 @@ public class IllClient {
 
     /* Socket Connection to Server */
     private Socket socket;
-
-    /* Other User's Number */
-    private int otherNo;
 
     /* Connection to the Server for Input and Output */
     private PrintWriter printWriter;
@@ -45,11 +41,11 @@ public class IllClient {
      * @return One Long String
      */
     private String concatenateArray(String[] array){
-        String temp = "";
+        StringBuilder temp = new StringBuilder();
         for(int i = 1;i< array.length; i++){
-            temp = temp + " " + array[i];
+            temp.append(" ").append(array[i]);
         }
-        return temp;
+        return temp.toString();
     }
 
     /**
@@ -71,11 +67,12 @@ public class IllClient {
 
     /**
      * Conducts the communication between the server and the client.
-     * @throws IllException Occurs in case of an Error
      */
-    private void initiate() throws IllException{
+    private void initiate() {
         int usrNo = Integer.parseInt(read()[1]);
-        if(usrNo == 1)otherNo = 2;
+        /* Other User's Number */
+        int otherNo;
+        if(usrNo == 1) otherNo = 2;
         else otherNo = 1;
         System.err.println("\t Connected to Server : #"+usrNo);
         boolean run = true;
@@ -94,7 +91,7 @@ public class IllClient {
                         run = false;
                         break;
                     case IllProtocol.SPEECH:
-                        System.err.println("\t #"+ otherNo+ " : "+concatenateArray(input));
+                        System.err.println("\t #"+ otherNo + " : "+concatenateArray(input));
                         break;
                     case IllProtocol.UR_TURN:
                         System.out.print(">");
@@ -120,10 +117,9 @@ public class IllClient {
     /**
      * Main Function from the Client Side
      * @param args Arguments that might be passed
-     * @throws IllException Exception Handling for Illusion
      * @throws IOException Exception Handling for Input and Output
      */
-    public static void main(String[]args) throws IllException, IOException {
+    public static void main(String[]args) throws IOException {
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(isr);
 

@@ -1,6 +1,5 @@
 package Server;
 
-import Common.IllException;
 import Common.IllProtocol;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -70,11 +69,11 @@ public class IllServer implements IllProtocol {
      * @return Continuous string
      */
     private String printText(String[] array){
-        String temp = "";
+        StringBuilder temp = new StringBuilder();
         for(int i = 1;i< array.length; i++){
-            temp = temp + " " + array[i];
+            temp.append(" ").append(array[i]);
         }
-        return temp;
+        return temp.toString();
     }
 
     /**
@@ -87,35 +86,34 @@ public class IllServer implements IllProtocol {
         printer.flush();
     }
 
-    /**
-     * Sends text to both the Clients
-     * (Might Be Used in Later Versions of the Application)
-     * @param printWriter1 PrintWriter of Client 1
-     * @param printWriter2 PrintWriter of Client 2
-     * @param text        Text to be Sent
-     */
-    private void announce(PrintWriter printWriter1, PrintWriter printWriter2, String text) {
-        print(printWriter1, text);
-        print(printWriter2, text);
-    }
+//    /**
+//     * Sends text to both the Clients
+//     * (Might Be Used in Later Versions of the Application)
+//     * @param printWriter1 PrintWriter of Client 1
+//     * @param printWriter2 PrintWriter of Client 2
+//     * @param text        Text to be Sent
+//     */
+//    private void announce(PrintWriter printWriter1, PrintWriter printWriter2, String text) {
+//        print(printWriter1, text);
+//        print(printWriter2, text);
+//    }
 
     /**
      * Conducts the exchange of words between the Clients
-     * @throws IllException Exception handling for protocol
      */
-    private void talk()throws IllException{
+    private void talk() {
         try {
             while (running){
                 print(printWriter1,IllProtocol.UR_TURN);
                 String[] user1said = getText(in1);
                 System.out.println(" User #1: "+printText((user1said)));
-                if(user1said[0] == IllProtocol.TERMINATE)running=false;
+                if(user1said[0].equals(IllProtocol.TERMINATE))running=false;
                 print(printWriter2,IllProtocol.SPEECH +" " +printText(user1said));
 
                 print(printWriter2,IllProtocol.UR_TURN);
                 String[] user2said = getText(in2);
                 System.out.println(" User #2: "+printText((user2said)));
-                if(user2said[0] == IllProtocol.TERMINATE)running=false;
+                if(user2said[0].equals(IllProtocol.TERMINATE))running=false;
                 print(printWriter1,IllProtocol.SPEECH +" " +printText(user2said));
             }
         }catch (NoSuchElementException ne){
@@ -134,8 +132,7 @@ public class IllServer implements IllProtocol {
      * @return Array including the Text
      */
     private String[] getText(Scanner in) {
-        String[] token = in.nextLine().split(" ");
-        return token;
+        return in.nextLine().split(" ");
     }
 
     /**
@@ -160,9 +157,8 @@ public class IllServer implements IllProtocol {
      * Starts a new sever.
      * @param args Used to specify the port on which the server should listen
      *             for incoming client connections.
-     * @throws IllException If there is an error starting the server.
      */
-    public static void main(String[] args) throws IllException, IOException {
+    public static void main(String[] args) throws IOException {
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(isr);
 
