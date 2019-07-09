@@ -13,7 +13,7 @@ public class IllusionEncryptor {
     private String rotIt(String input){
         StringBuilder output = new StringBuilder();
         for(int i = 0; i < input.length(); i++){
-            char converted = ' ';
+            char converted;
             char current = input.charAt(i);
             if(Character.isDigit(current)) converted = numROT(current);
             else if (Character.isLetter(current)) converted = charROT(current);
@@ -80,14 +80,14 @@ public class IllusionEncryptor {
     }
 
     private String BINtoSTR(String bin){
-                String s = " ";
+                StringBuilder s = new StringBuilder(" ");
         for(int index = 0; index < bin.length(); index+=9) {
             String temp = bin.substring(index, index+8);
             int num = Integer.parseInt(temp,2);
             char letter = (char) num;
-            s = s+letter;
+            s.append(letter);
         }
-        return s.trim();
+        return s.toString().trim();
     }
 
     public static String encoder(String text){
