@@ -178,11 +178,8 @@ public class IllusionEncryptor {
             if (text.equals("TERMINATE")) running = false;
             String encoded = encoder(text, num);
             System.err.println(encoded);
-            //String fake = ie.BINtoSTR(encoded);
-            //System.out.println("On trying to simply convert it back to String we get : " + fake);
             String decoded = decoder(encoded, num);
             System.err.println(decoded);
-
             if(decoded.equals(text))System.err.println("Success");
             else System.err.println("SOMETHING IS SERIOUSLY WRONG");
 

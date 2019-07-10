@@ -1,11 +1,10 @@
 package Client;
 
+import Common.IllusionVariableChecker;
 import Common.IllusionEncryptor;
 import Common.IllProtocol;
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -68,6 +67,11 @@ public class IllClient {
         return in.nextLine().split(" ");
     }
 
+    /**
+     * Converts a number to an array consisting of that number
+     * @param num Number to be converted
+     * @return array containing those numbers
+     */
     private int[] IntToArray(int num){
         int[] array = new int[8];
         for(int i = 0; i < 8; i++){
@@ -89,6 +93,7 @@ public class IllClient {
         if(usrNo == 1) otherNo = 2;
         else otherNo = 1;
         System.err.println("\t Connected to Server : #"+usrNo);
+        System.out.println("\t Type \"TERMINATE\" to Close the Connection.");
         boolean run = true;
         try{
             while(run){
@@ -138,13 +143,15 @@ public class IllClient {
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(isr);
 
-        System.out.println("\t Illusion Encryption");
-        System.out.println("\t Client Application");
-        System.out.println("\t Ver 0.5");
-        System.out.println("\t By -M- \n");
-
-        System.out.println("Enter the Host IP Address : ");
-        String host = br.readLine();
+        IllusionVariableChecker.greet(false);
+        boolean incorrect = true;
+        String host = "";
+        while(incorrect){
+            System.out.println("Enter the Host IP Address : ");
+            host = br.readLine().trim();
+            if(IllusionVariableChecker.ipChecker(host)) incorrect = false;
+            else System.out.println("Incorrect IP Syntax, Please Try Again.");
+        }
         System.out.println("Enter the Port Number : ");
         int port = Integer.parseInt(br.readLine());
         boolean scanning = true;

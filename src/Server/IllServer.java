@@ -1,7 +1,7 @@
 package Server;
 
 import Common.IllProtocol;
-import Common.IllusionEncryptor;
+import Common.IllusionVariableChecker;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -169,18 +169,21 @@ public class IllServer implements IllProtocol {
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(isr);
 
-        System.out.println("\t Illusion Encryption");
-        System.out.println("\t Server Application");
-        System.out.println("\t Ver 0.5");
-        System.out.println("\t By -M- \n");
+        IllusionVariableChecker.greet(true);
 
         System.out.println(" Enter the Port Number : ");
         int port = Integer.parseInt(br.readLine());
-        System.out.println(" Enter an 8 digit long key : ");
-        int eight = Integer.parseInt(br.readLine());
+        boolean incorrect = true;
+        String eight = "00000000";
+        while (incorrect){
+            System.out.println(" Enter an 8 digit long key : ");
+            eight = br.readLine();
+            if(IllusionVariableChecker.keyChecker(eight)) incorrect = false;
+            else System.out.println(" Incorrect Key, Try Again.");
+        }
         System.err.println("\t Establishing Connection ... ");
         try {
-            IllServer server = new IllServer(port,eight);
+            IllServer server = new IllServer(port,Integer.parseInt(eight));
             server.connectToClients();
             server.talk();
         } catch (IOException ie) {
