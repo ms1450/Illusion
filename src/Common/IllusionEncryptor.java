@@ -3,6 +3,7 @@ package Common;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Base64;
 
 /**
  * The first Encryptor that ive created, im not sure if im supposed to label it or not because its an encryption
@@ -122,6 +123,13 @@ public class IllusionEncryptor {
         return s.toString().trim();
     }
 
+    /**
+     * Adds another layer of encrypton by Encoding and Decoding the String based on the Key decided by the server.
+     * @param org Original String
+     * @param keylist KeyList array
+     * @param enc Value to either encode or decode
+     * @return Encoded or Decoded string
+     */
     private String keyCrypt(String org, int[] keylist, boolean enc){
         StringBuilder conv = new StringBuilder();
         int count = 0;
@@ -140,6 +148,19 @@ public class IllusionEncryptor {
         return conv.toString();
     }
 
+    /**
+     * Adds the mysterious 6th layer of encryption to the data.
+     * @param org Original Data
+     * @param enc True or false
+     * @return Encoded or Decoded Data
+     */
+    private String sixthCrypt(String org, boolean enc){
+        String output;
+        if(enc) output = Base64.getEncoder().encodeToString(org.getBytes());
+        else output = new String(Base64.getDecoder().decode(org));
+        return output;
+    }
+
 
     /**
      * The entire encoding method neatly tied with a bow, Kept it for any changes i might make in further developments
@@ -148,7 +169,7 @@ public class IllusionEncryptor {
      */
     public static String encoder(String text, int[] array){
         IllusionEncryptor ie = new IllusionEncryptor();
-        return ie.keyCrypt(ie.BINtoBINREV(ie.ROTtoBIN(ie.rotIt(text))),array,true);
+        return ie.sixthCrypt(ie.keyCrypt(ie.BINtoBINREV(ie.ROTtoBIN(ie.rotIt(text))),array,true),true);
     }
 
     /**
@@ -158,7 +179,7 @@ public class IllusionEncryptor {
      */
     public static String decoder(String text, int[] array){
         IllusionEncryptor ie = new IllusionEncryptor();
-        return ie.rotIt(ie.BINtoSTR(ie.BINtoBINREV(ie.keyCrypt(text.trim(),array,false))));
+        return ie.rotIt(ie.BINtoSTR(ie.BINtoBINREV(ie.keyCrypt(ie.sixthCrypt(text.trim(),false),array,false))));
     }
 
     /**
