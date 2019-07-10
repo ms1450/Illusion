@@ -20,6 +20,7 @@ public class IllClient {
     /* Connection to the Server for Input and Output */
     private PrintWriter printWriter;
     private Scanner in;
+    private String secret;
 
     /* Input from User Console */
     private Scanner user;
@@ -30,11 +31,12 @@ public class IllClient {
      * @param port Port Number of the Sever
      * @throws IOException Input Output Exception
      */
-    private IllClient(String hostname, int port)throws IOException {
+    private IllClient(String hostname, int port, String secret)throws IOException {
         socket = new Socket(hostname,port);
         printWriter = new PrintWriter(socket.getOutputStream());
         in = new Scanner(socket.getInputStream());
         user = new Scanner(System.in);
+        this.secret = secret;
     }
 
     /**
@@ -111,7 +113,7 @@ public class IllClient {
                         break;
                     case IllProtocol.SPEECH:
                         //System.err.println("\t #"+ otherNo + " : "+concatenateArray(input));
-                        System.err.println("\t #"+ otherNo + " : " + IllusionEncryptor.decoder(concatenateArray(input).trim(), keyArr));
+                        System.err.println("\t #"+ otherNo + " : " + IllusionEncryptor.decoder(concatenateArray(input).trim(), keyArr,secret));
                         break;
                     case IllProtocol.UR_TURN:
                         System.out.print(">");
@@ -122,7 +124,7 @@ public class IllClient {
                             print(IllProtocol.TERMINATE);
                         }
                         //print(IllProtocol.SPEECH + " " + text);
-                        print(IllProtocol.SPEECH + " " + IllusionEncryptor.encoder(text, keyArr));
+                        print(IllProtocol.SPEECH + " " + IllusionEncryptor.encoder(text, keyArr, secret));
                         break;
                 }
             }
@@ -154,11 +156,13 @@ public class IllClient {
         }
         System.out.println("Enter the Port Number : ");
         int port = Integer.parseInt(br.readLine());
+        System.err.println("Enter the Secret Key : ");
+        String secret = br.readLine();
         boolean scanning = true;
         System.err.println("\t Establishing Connection ... ");
         while(scanning){
             try {
-                IllClient server = new IllClient(host,port);
+                IllClient server = new IllClient(host,port,secret);
                 server.initiate();
                 scanning = false;
             }catch (IOException ie){ie.printStackTrace();}

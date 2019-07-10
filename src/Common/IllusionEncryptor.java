@@ -1,5 +1,6 @@
 package Common;
 
+import Common.AESEncryption;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -167,9 +168,9 @@ public class IllusionEncryptor {
      * @param text Text to be encoded
      * @return String with the encoded data
      */
-    public static String encoder(String text, int[] array){
+    public static String encoder(String text, int[] array, String secret){
         IllusionEncryptor ie = new IllusionEncryptor();
-        return ie.sixthCrypt(ie.keyCrypt(ie.BINtoBINREV(ie.ROTtoBIN(ie.rotIt(text))),array,true),true);
+        return AESEncryption.encrypt(ie.sixthCrypt(ie.keyCrypt(ie.BINtoBINREV(ie.ROTtoBIN(ie.rotIt(text))),array,true),true),secret);
     }
 
     /**
@@ -177,9 +178,9 @@ public class IllusionEncryptor {
      * @param text text to be decoded
      * @return original text
      */
-    public static String decoder(String text, int[] array){
+    public static String decoder(String text, int[] array, String secret){
         IllusionEncryptor ie = new IllusionEncryptor();
-        return ie.rotIt(ie.BINtoSTR(ie.BINtoBINREV(ie.keyCrypt(ie.sixthCrypt(text.trim(),false),array,false))));
+        return ie.rotIt(ie.BINtoSTR(ie.BINtoBINREV(ie.keyCrypt(ie.sixthCrypt(AESEncryption.decrypt(text.trim(),secret),false),array,false))));
     }
 
     /**
@@ -190,16 +191,16 @@ public class IllusionEncryptor {
     public static void main(String[]args)throws IOException{
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(isr);
-        IllusionEncryptor ie = new IllusionEncryptor();
+        String secret = "mehul";
         boolean running = true;
         while(running) {
             int[] num = new int[] {1,2,3,4,5,6,7,8};
             System.out.print("ENTER A TEXT : ");
             String text = br.readLine();
             if (text.equals("TERMINATE")) running = false;
-            String encoded = encoder(text, num);
+            String encoded = encoder(text, num, secret);
             System.err.println(encoded);
-            String decoded = decoder(encoded, num);
+            String decoded = decoder(encoded, num, secret);
             System.err.println(decoded);
             if(decoded.equals(text))System.err.println("Success");
             else System.err.println("SOMETHING IS SERIOUSLY WRONG");
