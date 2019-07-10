@@ -4,6 +4,8 @@ import Common.IllusionEncryptor;
 import Common.IllProtocol;
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -66,11 +68,22 @@ public class IllClient {
         return in.nextLine().split(" ");
     }
 
+    private int[] IntToArray(int num){
+        int[] array = new int[8];
+        for(int i = 0; i < 8; i++){
+            array[i] = num%10;
+            num = num/10;
+        }
+        return array;
+    }
+
     /**
      * Conducts the communication between the server and the client.
      */
     private void initiate() {
-        int usrNo = Integer.parseInt(read()[1]);
+        String[] init = read();
+        int usrNo = Integer.parseInt(init[1]);
+        int[] keyArr = IntToArray(Integer.parseInt(init[2]));
         /* Other User's Number */
         int otherNo;
         if(usrNo == 1) otherNo = 2;
@@ -93,7 +106,7 @@ public class IllClient {
                         break;
                     case IllProtocol.SPEECH:
                         //System.err.println("\t #"+ otherNo + " : "+concatenateArray(input));
-                        System.err.println("\t #"+ otherNo + " : " + IllusionEncryptor.decoder(concatenateArray(input).trim()));
+                        System.err.println("\t #"+ otherNo + " : " + IllusionEncryptor.decoder(concatenateArray(input).trim(), keyArr));
                         break;
                     case IllProtocol.UR_TURN:
                         System.out.print(">");
@@ -104,7 +117,7 @@ public class IllClient {
                             print(IllProtocol.TERMINATE);
                         }
                         //print(IllProtocol.SPEECH + " " + text);
-                        print(IllProtocol.SPEECH + " " + IllusionEncryptor.encoder(text));
+                        print(IllProtocol.SPEECH + " " + IllusionEncryptor.encoder(text, keyArr));
                         break;
                 }
             }
@@ -127,7 +140,7 @@ public class IllClient {
 
         System.out.println("\t Illusion Encryption");
         System.out.println("\t Client Application");
-        System.out.println("\t Ver 0.2");
+        System.out.println("\t Ver 0.5");
         System.out.println("\t By -M- \n");
 
         System.out.println("Enter the Host IP Address : ");

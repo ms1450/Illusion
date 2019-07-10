@@ -122,14 +122,33 @@ public class IllusionEncryptor {
         return s.toString().trim();
     }
 
+    private String keyCrypt(String org, int[] keylist, boolean enc){
+        StringBuilder conv = new StringBuilder();
+        int count = 0;
+        for(int i = 0; i < org.length(); i ++){
+            char ch = org.charAt(i);
+            if(ch != ' '){
+                if(enc) conv.append(Character.getNumericValue(ch) + keylist[count]);
+                else conv.append(Character.getNumericValue(ch) - keylist[count]);
+                count ++;
+            }
+            else {
+                count = 0;
+                conv.append(" ");
+            }
+        }
+        return conv.toString();
+    }
+
+
     /**
      * The entire encoding method neatly tied with a bow, Kept it for any changes i might make in further developments
      * @param text Text to be encoded
      * @return String with the encoded data
      */
-    public static String encoder(String text){
+    public static String encoder(String text, int[] array){
         IllusionEncryptor ie = new IllusionEncryptor();
-        return ie.BINtoBINREV(ie.ROTtoBIN(ie.rotIt(text)));
+        return ie.keyCrypt(ie.BINtoBINREV(ie.ROTtoBIN(ie.rotIt(text))),array,true);
     }
 
     /**
@@ -137,9 +156,9 @@ public class IllusionEncryptor {
      * @param text text to be decoded
      * @return original text
      */
-    public static String decoder(String text){
+    public static String decoder(String text, int[] array){
         IllusionEncryptor ie = new IllusionEncryptor();
-        return ie.rotIt(ie.BINtoSTR(ie.BINtoBINREV(text)));
+        return ie.rotIt(ie.BINtoSTR(ie.BINtoBINREV(ie.keyCrypt(text.trim(),array,false))));
     }
 
     /**
@@ -150,17 +169,21 @@ public class IllusionEncryptor {
     public static void main(String[]args)throws IOException{
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader br = new BufferedReader(isr);
+        IllusionEncryptor ie = new IllusionEncryptor();
         boolean running = true;
         while(running) {
+            int[] num = new int[] {1,2,3,4,5,6,7,8};
             System.out.print("ENTER A TEXT : ");
             String text = br.readLine();
             if (text.equals("TERMINATE")) running = false;
-            String encoded = encoder(text);
+            String encoded = encoder(text, num);
             System.err.println(encoded);
-            String decoded = decoder(encoded);
+            //String fake = ie.BINtoSTR(encoded);
+            //System.out.println("On trying to simply convert it back to String we get : " + fake);
+            String decoded = decoder(encoded, num);
             System.err.println(decoded);
 
-            if(decoded.equals(text))System.err.println("SUCCESS ENCRYPTOR IS WORKING");
+            if(decoded.equals(text))System.err.println("Success");
             else System.err.println("SOMETHING IS SERIOUSLY WRONG");
 
 

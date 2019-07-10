@@ -30,6 +30,8 @@ public class IllServer implements IllProtocol {
     private PrintWriter printWriter2;
     private Scanner in2;
 
+    private int modifierKey;
+
     /* State of the Application*/
     private boolean running = true;
 
@@ -38,8 +40,9 @@ public class IllServer implements IllProtocol {
      * @param port Port Number for Illusion
      * @throws IOException Exception Handling for inp==ut and output
      */
-    private IllServer(int port) throws IOException {
+    private IllServer(int port, int eightDigits) throws IOException {
         serverSocket = new ServerSocket(port);
+        modifierKey = eightDigits;
     }
 
     /**
@@ -50,14 +53,14 @@ public class IllServer implements IllProtocol {
         System.err.println("\t Connecting to User #1 : ");
         client1 = serverSocket.accept();
         printWriter1 = new PrintWriter(client1.getOutputStream());
-        print(printWriter1,IllProtocol.INIT + " 1");
+        print(printWriter1,IllProtocol.INIT + " 1 " + modifierKey);
         in1 = new Scanner(client1.getInputStream());
         System.err.println("\t Successfully Connected to User #1");
 
         System.err.println("\t Connecting to User #2 : ");
         client2 = serverSocket.accept();
         printWriter2 = new PrintWriter(client2.getOutputStream());
-        print(printWriter2,IllProtocol.INIT + " 2");
+        print(printWriter2,IllProtocol.INIT + " 2 " + modifierKey);
         in2 = new Scanner(client2.getInputStream());
         System.err.println("\t Successfully Connected to User #2");
 
@@ -105,17 +108,16 @@ public class IllServer implements IllProtocol {
     private void talk() {
         try {
             while (running){
+                int[] num = new int[]{};
                 print(printWriter1,IllProtocol.UR_TURN);
                 String[] user1said = getText(in1);
                 System.out.println(" User #1: "+printText((user1said)));
-                System.err.println("Decoder : "+IllusionEncryptor.decoder(printText(user1said).trim()));
                 if(user1said[0].equals(IllProtocol.TERMINATE))running=false;
                 print(printWriter2,IllProtocol.SPEECH +" " +printText(user1said));
 
                 print(printWriter2,IllProtocol.UR_TURN);
                 String[] user2said = getText(in2);
                 System.out.println(" User #2: "+printText((user2said)));
-                System.err.println("Decoder : "+IllusionEncryptor.decoder(printText(user2said).trim()));
                 if(user2said[0].equals(IllProtocol.TERMINATE))running=false;
                 print(printWriter1,IllProtocol.SPEECH +" " +printText(user2said));
             }
@@ -169,14 +171,16 @@ public class IllServer implements IllProtocol {
 
         System.out.println("\t Illusion Encryption");
         System.out.println("\t Server Application");
-        System.out.println("\t Ver 0.2");
+        System.out.println("\t Ver 0.5");
         System.out.println("\t By -M- \n");
 
         System.out.println(" Enter the Port Number : ");
         int port = Integer.parseInt(br.readLine());
+        System.out.println(" Enter an 8 digit long key : ");
+        int eight = Integer.parseInt(br.readLine());
         System.err.println("\t Establishing Connection ... ");
         try {
-            IllServer server = new IllServer(port);
+            IllServer server = new IllServer(port,eight);
             server.connectToClients();
             server.talk();
         } catch (IOException ie) {
