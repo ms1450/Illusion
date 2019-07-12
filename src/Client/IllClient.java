@@ -9,7 +9,9 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
- * Client side application for Illusion
+ * Client Application for Illusion
+ * This class connects to the Server and encrypts any messages entered by the user before sending it to the server.
+ * It also decrypts any messages received and relays them to the user.
  * @author Mehul Sen
  */
 public class IllClient {
@@ -17,16 +19,19 @@ public class IllClient {
     /* Socket Connection to Server */
     private Socket socket;
 
-    /* Connection to the Server for Input and Output */
+    /* Connections to the Server for both the Input and Output */
     private PrintWriter printWriter;
     private Scanner in;
+
+    /* The Secret Code to Be entered by the User on Runtime */
     private String secret;
 
     /* Input from User Console */
     private Scanner user;
 
     /**
-     * Constructor for the Client
+     * Constructor for the IllClient Class
+     * This takes opens the sockets and maintains t
      * @param hostname Hostname of the Server
      * @param port Port Number of the Sever
      * @throws IOException Input Output Exception

@@ -32,6 +32,7 @@ public class IllServer implements IllProtocol {
 
     private int modifierKey;
 
+
     /* State of the Application*/
     private boolean running = true;
 
@@ -80,6 +81,7 @@ public class IllServer implements IllProtocol {
         return temp.toString();
     }
 
+
     /**
      * Sends a String to a Client
      * @param printer PrintWriter of a Client
@@ -89,7 +91,7 @@ public class IllServer implements IllProtocol {
         printer.println(text);
         printer.flush();
     }
-
+//
 //    /**
 //     * Sends text to both the Clients
 //     * (Might Be Used in Later Versions of the Application)
@@ -108,7 +110,6 @@ public class IllServer implements IllProtocol {
     private void talk() {
         try {
             while (running){
-                int[] num = new int[]{};
                 print(printWriter1,IllProtocol.UR_TURN);
                 String[] user1said = getText(in1);
                 System.out.println(" User #1: "+printText((user1said)));
