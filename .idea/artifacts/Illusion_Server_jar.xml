@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="Illusion:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/Illusion_jar</output-path>
+  <artifact type="jar" name="Illusion_Server:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Illusion_Server_jar</output-path>
     <root id="archive" name="Illusion.jar">
       <element id="module-output" name="Illusion" />
     </root>

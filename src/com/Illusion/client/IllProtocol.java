@@ -1,4 +1,4 @@
-package Common;
+package com.Illusion.client;
 
 /**
  * A List of the Protocol Commands that will be Used in this Encryption

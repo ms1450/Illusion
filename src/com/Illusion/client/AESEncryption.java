@@ -1,7 +1,4 @@
-package Common;
-/**
- * This Class was taken from the Internet, it implements the AES encryption technique with a key.
- */
+package com.Illusion.client;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -11,6 +8,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
 
+/**
+ * This Class was taken from the Internet, it implements the AES encryption technique with a key.
+ */
 class AESEncryption {
 
     private static SecretKeySpec secretKey;

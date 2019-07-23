@@ -1,8 +1,5 @@
-package Client;
+package com.Illusion.client;
 
-import Common.IllusionVariableChecker;
-import Common.IllusionEncryptor;
-import Common.IllProtocol;
 import java.io.*;
 import java.net.Socket;
 import java.util.NoSuchElementException;

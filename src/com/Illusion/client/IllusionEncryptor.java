@@ -1,6 +1,5 @@
-package Common;
+package com.Illusion.client;
 
-import Common.AESEncryption;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -168,7 +167,7 @@ public class IllusionEncryptor {
      * @param text Text to be encoded
      * @return String with the encoded data
      */
-    public static String encoder(String text, int[] array, String secret){
+    static String encoder(String text, int[] array, String secret){
         IllusionEncryptor ie = new IllusionEncryptor();
         return AESEncryption.encrypt(ie.sixthCrypt(ie.keyCrypt(ie.BINtoBINREV(ie.ROTtoBIN(ie.rotIt(text))),array,true),true),secret);
     }
@@ -178,7 +177,7 @@ public class IllusionEncryptor {
      * @param text text to be decoded
      * @return original text
      */
-    public static String decoder(String text, int[] array, String secret){
+    static String decoder(String text, int[] array, String secret){
         IllusionEncryptor ie = new IllusionEncryptor();
         return ie.rotIt(ie.BINtoSTR(ie.BINtoBINREV(ie.keyCrypt(ie.sixthCrypt(AESEncryption.decrypt(text.trim(),secret),false),array,false))));
     }

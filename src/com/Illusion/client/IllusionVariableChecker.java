@@ -1,4 +1,4 @@
-package Common;
+package com.Illusion.client;
 
 /**
  * This Class is used to make sure that the variable entered into the program by the user are accurate.
@@ -9,7 +9,7 @@ public class IllusionVariableChecker {
      * @param ip IP entered
      * @return True or false
      */
-    public static boolean ipChecker(String ip){
+    static boolean ipChecker(String ip){
         if(ip.length() < 5 || ip.length() > 15) return false;
         int dotCount = 0;
         for(int i= 0; i<ip.length(); i ++){
@@ -36,7 +36,7 @@ public class IllusionVariableChecker {
         return true;
     }
 
-    public static void greet(boolean server){
+    static void greet(boolean server){
         System.out.println("\t Illusion Encryption");
         if(server)System.out.println("\t Server Application");
         else System.out.println("\t Client Application");

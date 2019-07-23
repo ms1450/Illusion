@@ -1,7 +1,6 @@
-package Server;
+package com.Illusion.server;
 
-import Common.IllProtocol;
-import Common.IllusionVariableChecker;
+import com.Illusion.server.IllusionVariableChecker;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
