@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 
 public class Server {
 
@@ -24,6 +21,8 @@ public class Server {
     private PrintWriter printWriter2;
     private Scanner in2;
 
+    private int port;
+
     /* Is this Code Running */
     private boolean running = true;
 
@@ -34,6 +33,7 @@ public class Server {
      */
     private Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
+        this.port = port;
     }
 
     /**
@@ -94,7 +94,7 @@ public class Server {
      * @return string with ARB6 rearranged.
      */
     private String randomConfig(){
-        List<Character> characters = new ArrayList<Character>();
+        List<Character> characters = new ArrayList<>();
         for(char c:"ARB6".toCharArray()){
             characters.add(c);
         }
@@ -110,7 +110,9 @@ public class Server {
      * Starts a Loop where the Users Send messages to Each other one after the other.
      */
     private void talk() {
+        Random random = new Random();
         int count = 0;
+        int changeAt = random.nextInt(5 - 1 + 1) + 1;
         try {
             while (running){
                 count ++;
@@ -129,10 +131,12 @@ public class Server {
                 print(printWriter1,IllProtocol.SPEECH +" " +printText(user2said));
 
                 /* Announces a Config change at random intervals */
-                //TODO Change the 1 to a random number between 1 and 5
-                if(count == 1){
-                    announce(IllProtocol.SERVER_SPEECH +" Change the config to : "+randomConfig());
+                if(count == changeAt){
+                    Encryptor encryptor = new Encryptor();
+                    String encrypted = encryptor.AESit(randomConfig(),true,Integer.toString(port));
+                    announce(IllProtocol.SERVER_SPEECH +" "+encrypted);
                     count = 0;
+                    changeAt = random.nextInt(5 - 1 + 1) + 1;
                 }
             }
         } catch (NoSuchElementException ne){
@@ -177,11 +181,12 @@ public class Server {
     public static void main(String[]args)throws IOException{
         System.err.println("\t Establishing Connection ... ");
         try {
-            Server server = new Server(12343);
+            Server server = new Server(1672);
+
             server.connectToClients();
             server.talk();
         } catch (IOException ie) {
-            System.out.println();
+           System.out.println("Na, I dont feel like Working today.");
         }
     }
 

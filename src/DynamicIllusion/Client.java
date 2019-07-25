@@ -19,10 +19,14 @@ public class Client {
 
     private String secret;
 
-    private String config = "RB6A";
+    private Encryptor encryptor = new Encryptor();
+
+    private int port;
+
+    private String config = "ARB6";
 
     /**
-     * Constructor for the IllClient Class
+     * Constructor for the Client Class
      * This takes opens the sockets and maintains t
      * @param hostname Hostname of the Server
      * @param port Port Number of the Sever
@@ -30,6 +34,7 @@ public class Client {
      */
     private Client(String hostname, int port, String secret)throws IOException {
         socket = new Socket(hostname,port);
+        this.port = port;
         printWriter = new PrintWriter(socket.getOutputStream());
         in = new Scanner(socket.getInputStream());
         user = new Scanner(System.in);
@@ -51,7 +56,6 @@ public class Client {
 
     private String scramble(String text, boolean enc){
         String output = text;
-        Encryptor encryptor = new Encryptor();
         if(enc){
             for(int i = 0; i<config.length();i++){
                 char ch = config.charAt(i);
@@ -89,7 +93,6 @@ public class Client {
                         output = encryptor.rotIt(output);
                         break;
                 }
-                System.out.println(output);
             }
         }
         return output;
@@ -130,7 +133,9 @@ public class Client {
                 String[] input = read();
                 switch(input[0]){
                     case IllProtocol.SERVER_SPEECH:
-                        System.out.println("\t SERVER : "+concatenateArray(input));
+                        String configuration = encryptor.AESit(input[1],false,Integer.toString(port));
+                        System.out.println("\t SERVER : Changed Configuration to "+configuration);
+                        config = configuration;
                         break;
                     case IllProtocol.ERROR:
                         System.err.println("\t Something Went Wrong");
@@ -157,7 +162,8 @@ public class Client {
                         break;
                 }
             }
-        }catch (NoSuchElementException ne){System.err.println("User #"+otherNo+ " terminated the connection.");}
+        } catch (NoSuchElementException ne){System.err.println("User #"+otherNo+ " terminated the connection.");}
+
         in.close();
         printWriter.close();
         user.close();
@@ -170,10 +176,10 @@ public class Client {
         System.err.println("\t Establishing Connection ... ");
         while(scanning){
             try {
-                Client server = new Client("192.168.206.1",12343,"mehul");
+                Client server = new Client("172.16.10.97",1672,"mehul");
                 server.initiate();
                 scanning = false;
-            }catch (IOException ie){ie.printStackTrace();}
+            } catch (IOException ie){ie.printStackTrace();}
         }
     }
 }
