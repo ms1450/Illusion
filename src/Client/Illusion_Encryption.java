@@ -1,17 +1,19 @@
-package DynamicIllusion;
+package Client;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
-import java.net.URL;
+/* Import's all the necessary packages */
 import java.util.Base64;
 
-public class Encryptor {
+/**
+ * This Class contains four different types of encryptions. It acts as a Helper class to the Illusion_Client
+ * @author Mehul Sen
+ */
+class Illusion_Encryption {
+
     /**
-     * This method uses rot 13 if the character is a letter and rot 5 if it is a number
-     * @param input string before rotting
-     * @return rotted string
+     * This method uses ROT13 if the character is a letter and ROT5 if it is a number to encrypt each individual
+     * characters in a string.
+     * @param input String to be Encrypted or Decrypted.
+     * @return Rotted String
      */
     String rotIt(String input){
         StringBuilder output = new StringBuilder();
@@ -27,7 +29,7 @@ public class Encryptor {
     }
 
     /**
-     * Helper method to rot the character if the character is a letter.
+     * Helper method to rotIt, used when the character is a letter.
      * @param input The char input provided
      * @return rotted character
      */
@@ -49,7 +51,7 @@ public class Encryptor {
     }
 
     /**
-     * Helper method to rot if the character is a number
+     * Helper method to rotIt, used when the character is a number
      * @param input the char input provided
      * @return rotted character
      */
@@ -66,19 +68,27 @@ public class Encryptor {
         return converted;
     }
 
+    /**
+     * This method first converts the String to Binary, then reverses the Binary Values (1 becomes 0 and 0 becomes 1)
+     * @param text Text to be Encrypted or Decrypted
+     * @param encrypt True for Encryption and False for Decryption
+     * @return Returns the Modified Text
+     */
     String BINit(String text, boolean encrypt){
+        /* Runs if the Text needs to be Encrypted */
         if(encrypt){
             String temporary = STRtoBIN(text);
-            return BINtoBINREV(temporary);
+            return BINtoBINrev(temporary);
         }
+        /* Runs if the Text needs to be Decrypted */
         else{
-            String temporary = BINtoBINREV(text);
+            String temporary = BINtoBINrev(text);
             return BINtoSTR(temporary);
         }
     }
 
     /**
-     * Converts a String to its binary counterpart
+     * Helper method to BINit, used to convert a String to its Binary counterpart
      * @param text String
      * @return String but only consisting of ones and zeroes
      */
@@ -99,11 +109,11 @@ public class Encryptor {
     }
 
     /**
-     * Reverses the binary state, if it is one, then it will have zero, if it is a zero then it will have a one.
+     * Helper method to BINit, reverses the binary state, (1 becomes 0 and 0 becomes 1)
      * @param bin Binary String
      * @return reversed binary string
      */
-    private String BINtoBINREV(String bin){
+    private String BINtoBINrev(String bin){
         StringBuilder newBin = new StringBuilder();
         for(int i = 0; i < bin.length(); i++){
             if(bin.charAt(i) == '0') newBin.append('1');
@@ -114,9 +124,9 @@ public class Encryptor {
     }
 
     /**
-     * Converts a binary string back to a normal string
+     * Helper method to BINit, converts a binary string back to a text.
      * @param bin binary string
-     * @return normal string
+     * @return text
      */
     private String BINtoSTR(String bin){
         StringBuilder s = new StringBuilder(" ");
@@ -130,9 +140,9 @@ public class Encryptor {
     }
 
     /**
-     * Adds the mysterious 6th layer of encryption to the data.
+     * Encrypts or Decrypts the Text using Base64 Encryption
      * @param org Original Data
-     * @param enc True or false
+     * @param enc True for Encryption and False for Decryption
      * @return Encoded or Decoded Data
      */
     String B64it(String org, boolean enc){
@@ -140,54 +150,16 @@ public class Encryptor {
         else return new String(Base64.getDecoder().decode(org));
     }
 
+    /**
+     * Encrypts or Decrypts a text using the helper class AESEncryption to implement AES on the given text.
+     * @param text Text to be Encrypted or Decrypted
+     * @param enc True for Encryption and False for Decryption
+     * @param secret Secret Keyword used for Encryption and Decryption
+     * @return Encrypted or Decrypted Data.
+     */
     String AESit(String text, boolean enc, String secret){
         if(enc) return AESEncryption.encrypt(text,secret);
         else return AESEncryption.decrypt(text,secret);
-    }
-
-    public static void main(String[]args)throws IOException{
-        InputStreamReader isr = new InputStreamReader(System.in);
-        BufferedReader br = new BufferedReader(isr);
-        Encryptor enc = new Encryptor();
-        System.out.println("Enter Text : ");
-        String text = br.readLine();
-        String ROTencrypt = enc.rotIt(text);
-        System.out.println("ROT Encrypt : " +ROTencrypt);
-        System.out.println("ROT Decrypt : " + enc.rotIt(ROTencrypt));
-        String BINencrypt = enc.BINit(text,true);
-        System.out.println("BIN Encrypt : "+BINencrypt);
-        System.out.println("BIN Decrypt : " +enc.BINit(BINencrypt,false));
-        String Base64encrypt = enc.B64it(text,true);
-        System.out.println("B64 Encrypt : " +Base64encrypt);
-        System.out.println("B64 Decrypt : " +enc.B64it(Base64encrypt,false));
-        System.out.println("AES Secret : mehul");
-        String AESencrypt = enc.AESit(text,true,"mehul");
-        System.out.println("AES Encrypt : "+AESencrypt);
-        System.out.println("AES Decrypt : "+enc.AESit(AESencrypt,false,"mehul"));
-
-        System.out.println(" ");
-        String SampleText = "This is the Sample Text I want to Encrypt";
-        String encrypted = enc.AESit(SampleText,true,"192.168.206.1");
-        System.out.println(encrypted);
-        System.out.println(enc.AESit(encrypted,false,"192.168.206.1"));
-
-
-        String systemipaddress = "";
-        try
-        {
-            URL url_name = new URL("http://bot.whatismyipaddress.com");
-
-            BufferedReader sc =
-                    new BufferedReader(new InputStreamReader(url_name.openStream()));
-
-            // reads system IPAddress
-            systemipaddress = sc.readLine().trim();
-        }
-        catch (Exception e)
-        {
-            systemipaddress = "Cannot Execute Properly";
-        }
-        System.out.println("Public IP Address: " + systemipaddress +"\n");
     }
 }
 

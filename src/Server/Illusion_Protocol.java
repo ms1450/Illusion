@@ -1,10 +1,10 @@
-package com.Illusion.client;
+package Server;
 
 /**
- * A List of the Protocol Commands that will be Used in this Encryption
+ * A List of the Protocol Commands that will be Used in this Program
  * @author Mehul Sen
  */
-public interface IllProtocol {
+public interface Illusion_Protocol {
     //Initialize Command Sent By the Server
     String INIT = "ILLUSION_INIT";
 

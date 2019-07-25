@@ -1,4 +1,4 @@
-package DynamicIllusion;
+package Client;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Base64;
 
 /**
- * This Class was taken from the Internet, it implements the AES encryption technique with a key.
+ * This Code was implemented from the Internet, you can gather it when you google "AESEncryption java"
  */
 class AESEncryption {
 

@@ -1,4 +1,4 @@
-package com.Illusion.client;
+package Server;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Base64;
 
 /**
- * This Class was taken from the Internet, it implements the AES encryption technique with a key.
+ * This Code was implemented from the Internet, you can gather it when you google "AESEncryption java"
  */
 class AESEncryption {
 
@@ -42,22 +42,6 @@ class AESEncryption {
         catch (Exception e)
         {
             System.out.println("Error while encrypting: " + e.toString());
-        }
-        return null;
-    }
-
-    static String decrypt(String strToDecrypt, String secret)
-    {
-        try
-        {
-            setKey(secret);
-            Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
-            cipher.init(Cipher.DECRYPT_MODE, secretKey);
-            return new String(cipher.doFinal(Base64.getDecoder().decode(strToDecrypt)));
-        }
-        catch (Exception e)
-        {
-            System.out.println("Error while decrypting: " + e.toString());
         }
         return null;
     }
