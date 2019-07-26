@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -43,6 +44,9 @@ public class Illusion_Client {
     /* Secret Text */
     private String secret;
 
+    /* Verbose Boolean */
+    private boolean verbose;
+
     /* Illusion_Encryptors Instance */
     private Illusion_Encryption illusionEncrypt;
 
@@ -59,12 +63,13 @@ public class Illusion_Client {
      * @param port Port Number of the Sever
      * @throws IOException Input Output Exception
      */
-    private Illusion_Client(String hostname, int port, String secret)throws IOException {
+    private Illusion_Client(String hostname, int port, String secret, boolean verbose)throws IOException {
         /* Initial Values for different Variables. */
         config = "ARB6";
         illusionEncrypt = new Illusion_Encryption();
         this.port = port;
         this.secret = secret;
+        this.verbose = verbose;
 
         /* Connections to the Server */
         socket = new Socket(hostname,port);
@@ -167,20 +172,23 @@ public class Illusion_Client {
         int otherNo;
         if(usrNo == 1) otherNo = 2;
         else otherNo = 1;
-        System.err.println("\t Connected to Server : #"+usrNo);
-        System.out.println("\t Type \"TERMINATE\" to Close the Connection.");
+        if(verbose) System.err.println("\t Connected to Server : #"+usrNo);
+        if(verbose) System.out.println("\t Type \"TERMINATE\" to Close the Connection.");
 
         /* The Server and Client Communicate inside the While loop where the Client handles each input from the server
         based on the specific protocol. */
         boolean run = true;
         try{
+            int count = 0;
+            Random random = new Random();
+            int randomDecoy = random.nextInt(5 - 1 + 1) + 1;
             while(run){
                 String[] input = read();
                 switch(input[0]){
                     /* The Dynamic aspect comes into play as the Server constantly changes the configuration for encryption */
                     case Illusion_Protocol.SERVER_SPEECH:
                         String configuration = illusionEncrypt.AESit(input[1],false,Integer.toString(port));
-                        System.out.println("\t SERVER : Changed Configuration to "+configuration);
+                        if(verbose) System.out.println("\t SERVER : CONFIG CHANGE TO "+configuration);
                         config = configuration;
                         break;
                     case Illusion_Protocol.ERROR:
@@ -193,19 +201,31 @@ public class Illusion_Client {
                         break;
                     case Illusion_Protocol.SPEECH:
                         String input_text = concatenateArray(input).trim();
-                        System.err.println("\t #"+ otherNo + " : " + scramble(input_text,false));
+                        String decoded = scramble(input_text,false);
+                        if(decoded.startsWith("ZbOnG0")) {if(verbose) System.out.println("\t SERVER : DECOY SUCCESSFULLY DEPLOYED ");}
+                        else {
+                            System.err.println("\t #" + otherNo + " : " + scramble(input_text, false));
+                        }
                         break;
                     case Illusion_Protocol.UR_TURN:
-                        System.out.print(">");
-                        String text = user.nextLine();
-                        /* Closes Connection if the User types "TERMINATE" */
-                        if(text.equals("TERMINATE")){
-                            run = false;
-                            System.err.println("\t Closing Connection To Server");
-                            print(Illusion_Protocol.TERMINATE);
+                        if(count == randomDecoy){
+                            count = 0;
+                            randomDecoy = random.nextInt(5 - 1 + 1) + 1;
+                            print(Illusion_Protocol.SPEECH + " " + scramble("ZbOnG0" + Illusion_Encryption.randomAlphaNumeric(random.nextInt(15-7 +1)+1),true));
                         }
-                        String output_text = scramble(text,true);
-                        print(Illusion_Protocol.SPEECH + " " + output_text);
+                        else {
+                            System.out.print(">");
+                            String text = user.nextLine();
+                            count++;
+                            /* Closes Connection if the User types "TERMINATE" */
+                            if (text.equals("TERMINATE")) {
+                                run = false;
+                                System.err.println("\t Closing Connection To Server");
+                                print(Illusion_Protocol.TERMINATE);
+                            }
+                            String output_text = scramble(text, true);
+                            print(Illusion_Protocol.SPEECH + " " + output_text);
+                        }
                         break;
                 }
             }
@@ -216,7 +236,7 @@ public class Illusion_Client {
         printWriter.close();
         user.close();
         try{socket.close();}catch (IOException ie){ie.printStackTrace();}
-        System.err.println("\t Connection Successfully Closed");
+        if(verbose) System.err.println("\t Connection Successfully Closed");
         System.out.println("Goodbye :)");
     }
 
@@ -260,10 +280,16 @@ public class Illusion_Client {
             System.out.print("Enter the Secret Key : ");
             String key = br.readLine();
 
+            System.out.println("Verbose ? y/n");
+            String verb = br.readLine();
+            boolean verbose = false;
+            if(verb.charAt(0) == 'y' || verb.charAt(0) == 'Y') verbose = true;
+
             /* Established Communication once all the Variables are present */
             System.err.println("\t Establishing Connection ... ");
-            Illusion_Client server = new Illusion_Client(ip, port, key);
-            server.banner();
+            Illusion_Client server = new Illusion_Client(ip, port, key, verbose);
+            if(verbose) server.banner();
+            else System.out.println("Illusion Client Application by -M-");
             server.initiate();
             scanning = false;
         }
