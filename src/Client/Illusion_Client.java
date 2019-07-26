@@ -20,6 +20,19 @@ public class Illusion_Client {
     /* Socket Connection to Server */
     private Socket socket;
 
+    private void banner(){
+        System.out.println("88  88  88                          88                            \n");
+        System.out.println("88  88  88                          \"\"                            \n");
+        System.out.println("88  88  88                                                        \n");
+        System.out.println("88  88  88  88       88  ,adPPYba,  88   ,adPPYba,   8b,dPPYba,   \n");
+        System.out.println("88  88  88  88       88  I8[    \"\"  88  a8\"     \"8a  88P'   `\"8a  \n");
+        System.out.println("88  88  88  88       88   `\"Y8ba,   88  8b       d8  88       88  \n");
+        System.out.println("88  88  88  \"8a,   ,a88  aa    ]8I  88  \"8a,   ,a8\"  88       88  \n");
+        System.out.println("88  88  88   `\"YbbdP'Y8  `\"YbbdP\"'  88   `\"YbbdP\"'   88       88  \n");
+        System.out.println("");
+        System.out.println("Client Application \t \t \t -M-");
+    }
+
     /* Connections to the Server for both the Input and Output */
     private PrintWriter printWriter;
     private Scanner in;
@@ -214,6 +227,7 @@ public class Illusion_Client {
      * @throws IOException Input Output error that might occur.
      */
     public static void main(String[]args)throws IOException{
+
         /* Initial Values of Variables. */
         int port = 0;
         String ip = "";
@@ -249,6 +263,7 @@ public class Illusion_Client {
             /* Established Communication once all the Variables are present */
             System.err.println("\t Establishing Connection ... ");
             Illusion_Client server = new Illusion_Client(ip, port, key);
+            server.banner();
             server.initiate();
             scanning = false;
         }

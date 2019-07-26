@@ -36,6 +36,19 @@ public class Illusion_Server {
     /* Boolean value for the State of the CPde */
     private boolean running = true;
 
+    private void banner(){
+        System.out.println("88  88  88                          88                            \n");
+        System.out.println("88  88  88                          \"\"                            \n");
+        System.out.println("88  88  88                                                        \n");
+        System.out.println("88  88  88  88       88  ,adPPYba,  88   ,adPPYba,   8b,dPPYba,   \n");
+        System.out.println("88  88  88  88       88  I8[    \"\"  88  a8\"     \"8a  88P'   `\"8a  \n");
+        System.out.println("88  88  88  88       88   `\"Y8ba,   88  8b       d8  88       88  \n");
+        System.out.println("88  88  88  \"8a,   ,a88  aa    ]8I  88  \"8a,   ,a8\"  88       88  \n");
+        System.out.println("88  88  88   `\"YbbdP'Y8  `\"YbbdP\"'  88   `\"YbbdP\"'   88       88  \n");
+        System.out.println("");
+        System.out.println("Server Application \t \t \t -M-");
+    }
+
     /**
      * Constructor for Server Creation
      * @param port Port Number for Illusion
@@ -231,6 +244,7 @@ public class Illusion_Server {
         System.err.println("\t Establishing Connection ... ");
         try {
             Illusion_Server illusionServer = new Illusion_Server(port);
+            illusionServer.banner();
             illusionServer.connectToClients();
             illusionServer.talk();
         } catch (IOException ie) {
