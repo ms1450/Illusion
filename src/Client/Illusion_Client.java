@@ -30,7 +30,7 @@ public class Illusion_Client {
         System.out.println("88  88  88  88       88   `\"Y8ba,   88  8b       d8  88       88  \n");
         System.out.println("88  88  88  \"8a,   ,a88  aa    ]8I  88  \"8a,   ,a8\"  88       88  \n");
         System.out.println("88  88  88   `\"YbbdP'Y8  `\"YbbdP\"'  88   `\"YbbdP\"'   88       88  \n");
-        System.out.println("");
+        System.out.println();
         System.out.println("Client Application \t \t \t -M-");
     }
 

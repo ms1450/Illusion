@@ -33,9 +33,6 @@ public class Illusion_Server {
     /* Port Number for the Connection */
     private int port;
 
-    /* Boolean value for the State of the CPde */
-    private boolean running = true;
-
     private void banner(){
         System.out.println("88  88  88                          88                            \n");
         System.out.println("88  88  88                          \"\"                            \n");
@@ -45,7 +42,7 @@ public class Illusion_Server {
         System.out.println("88  88  88  88       88   `\"Y8ba,   88  8b       d8  88       88  \n");
         System.out.println("88  88  88  \"8a,   ,a88  aa    ]8I  88  \"8a,   ,a8\"  88       88  \n");
         System.out.println("88  88  88   `\"YbbdP'Y8  `\"YbbdP\"'  88   `\"YbbdP\"'   88       88  \n");
-        System.out.println("");
+        System.out.println();
         System.out.println("Server Application \t \t \t -M-");
     }
 
@@ -145,23 +142,21 @@ public class Illusion_Server {
 
         /* The Conversations occur here */
         try {
-            while (running){
-
-                /* Counts the Number of Loops occuring */
+            while (true){
+                /* Counts the Number of Loops occurring */
                 count ++;
-
                 /* User #1 Converses */
                 print(printWriter1, Illusion_Protocol.UR_TURN);
                 String[] user1said = getText(in1);
                 System.out.println(" User #1: "+printText(user1said));
-                if(user1said[0].equals(Illusion_Protocol.TERMINATE)) running=false;
+                if(user1said[0].equals(Illusion_Protocol.TERMINATE)) break;
                 print(printWriter2, Illusion_Protocol.SPEECH +" " +printText(user1said));
 
                 /* User #2 Converses */
                 print(printWriter2, Illusion_Protocol.UR_TURN);
                 String[] user2said = getText(in2);
                 System.out.println(" User #2: "+printText(user2said));
-                if(user2said[0].equals(Illusion_Protocol.TERMINATE)) running=false;
+                if(user2said[0].equals(Illusion_Protocol.TERMINATE)) break;
                 print(printWriter1, Illusion_Protocol.SPEECH +" " +printText(user2said));
 
                 /* Announces a Config change at Random Intervals */
