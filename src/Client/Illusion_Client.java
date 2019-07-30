@@ -20,19 +20,6 @@ public class Illusion_Client {
     /* Socket Connection to Server */
     private Socket socket;
 
-    private void banner(){
-        System.out.println("88  88  88                          88                            \n");
-        System.out.println("88  88  88                          \"\"                            \n");
-        System.out.println("88  88  88                                                        \n");
-        System.out.println("88  88  88  88       88  ,adPPYba,  88   ,adPPYba,   8b,dPPYba,   \n");
-        System.out.println("88  88  88  88       88  I8[    \"\"  88  a8\"     \"8a  88P'   `\"8a  \n");
-        System.out.println("88  88  88  88       88   `\"Y8ba,   88  8b       d8  88       88  \n");
-        System.out.println("88  88  88  \"8a,   ,a88  aa    ]8I  88  \"8a,   ,a8\"  88       88  \n");
-        System.out.println("88  88  88   `\"YbbdP'Y8  `\"YbbdP\"'  88   `\"YbbdP\"'   88       88  \n");
-        System.out.println("");
-        System.out.println("Client Application \t \t \t -M-");
-    }
-
     /* Connections to the Server for both the Input and Output */
     private PrintWriter printWriter;
     private Scanner in;
@@ -71,6 +58,20 @@ public class Illusion_Client {
         printWriter = new PrintWriter(socket.getOutputStream());
         in = new Scanner(socket.getInputStream());
         user = new Scanner(System.in);
+    }
+
+    /**
+     * Function to print the application banner.
+     */
+    private void banner(){
+        System.out.println(" _____ _             _____ _ _           _             ");
+        System.out.println("/__   \\ |__   ___    \\_   \\ | |_   _ ___(_) ___  _ __");
+        System.out.println("  / /\\/ '_ \\ / _ \\    / /\\/ | | | | / __| |/ _ \\| '_ \\ ");
+        System.out.println(" / /  | | | |  __/ /\\/ /_ | | | |_| \\__ \\ | (_) | | | |");
+        System.out.println(" \\/   |_| |_|\\___| \\____/ |_|_|\\__,_|___/_|\\___/|_| |_|");
+        System.out.println(" ");
+        System.out.println("Client Application");
+        System.out.println("Created by -M-");
     }
 
     /**
